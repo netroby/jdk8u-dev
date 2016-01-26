@@ -179,13 +179,6 @@ final class NumberArrayData extends ContinuousArrayData implements NumericElemen
     }
 
     @Override
-    public ArrayData set(final int index, final long value, final boolean strict) {
-        array[index] = value;
-        setLength(Math.max(index + 1, length()));
-        return this;
-    }
-
-    @Override
     public ArrayData set(final int index, final double value, final boolean strict) {
         array[index] = value;
         setLength(Math.max(index + 1, length()));
@@ -214,7 +207,7 @@ final class NumberArrayData extends ContinuousArrayData implements NumericElemen
 
     @Override
     public MethodHandle getElementGetter(final Class<?> returnType, final int programPoint) {
-        if (returnType == int.class || returnType == long.class) {
+        if (returnType == int.class) {
             return null;
         }
         return getContinuousElementGetter(HAS_GET_ELEM, returnType, programPoint);
@@ -228,11 +221,6 @@ final class NumberArrayData extends ContinuousArrayData implements NumericElemen
     @Override
     public int getInt(final int index) {
         return JSType.toInt32(array[index]);
-    }
-
-    @Override
-    public long getLong(final int index) {
-        return (long)array[index];
     }
 
     @Override
@@ -315,17 +303,17 @@ final class NumberArrayData extends ContinuousArrayData implements NumericElemen
     }
 
     @Override
-    public long fastPush(final int arg) {
+    public double fastPush(final int arg) {
         return fastPush((double)arg);
     }
 
     @Override
-    public long fastPush(final long arg) {
+    public double fastPush(final long arg) {
         return fastPush((double)arg);
     }
 
     @Override
-    public long fastPush(final double arg) {
+    public double fastPush(final double arg) {
         final int len = (int)length();
         if (len == array.length) {
            //note that fastpush never creates spares arrays, there is nothing to gain by that - it will just use even more memory
