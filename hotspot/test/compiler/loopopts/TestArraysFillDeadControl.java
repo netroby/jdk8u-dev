@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, 2013, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -19,45 +19,35 @@
  * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
  * or visit www.oracle.com if you need additional information or have any
  * questions.
+ *
  */
 
 /**
- * JDK-8026367: Add a sync keyword to mozilla_compat
- *
  * @test
- * @run
+ * @bug 8147645
+ * @summary Array.fill intrinsification code doesn't mark replaced control as dead
+ * @run main/othervm  -XX:-TieredCompilation -XX:CompileCommand=dontinline,TestArraysFillDeadControl::dont_inline TestArraysFillDeadControl
+ *
  */
 
-if (typeof sync === "undefined") {
-    load("nashorn:mozilla_compat.js");
-}
+import java.util.Arrays;
 
-var obj = {
-    count: 0,
-    // Sync called with one argument will synchronize on this-object of invocation
-    inc: sync(function(d) {
-        this.count += d;
-        Assert.assertTrue(java.lang.Thread.holdsLock(this));
-    }),
-    // Pass explicit object to synchronize on as second argument
-    dec: sync(function(d) {
-        this.count -= d;
-        Assert.assertTrue(java.lang.Thread.holdsLock(obj));
-    }, obj)
-};
+public class TestArraysFillDeadControl {
 
-var t1 = new java.lang.Thread(function() {
-    for (var i = 0; i < 100000; i++) obj.inc(1);
-});
-var t2 = new java.lang.Thread(function() {
-    for (var i = 0; i < 100000; i++) obj.dec(1);
-});
+    static void dont_inline() {
+    }
 
-t1.start();
-t2.start();
-t1.join();
-t2.join();
+    static int i = 1;
 
-if (obj.count !== 0) {
-    throw new Error("Expected count == 0, got " + obj.count);
+    public static void main(String[] args) {
+        for (int j = 0; j < 200000; j++) {
+            int[] a = new int[2];
+            int b = i;
+
+            Arrays.fill(a, 1);
+            Arrays.fill(a, 1+b);
+
+            dont_inline();
+        }
+    }
 }
