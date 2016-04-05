@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -21,22 +21,41 @@
  * questions.
  */
 
+package testTypes;
+
+import javax.xml.bind.annotation.XmlRegistry;
+
 /**
- * @test Test8000311
- * @key gc
- * @bug 8000311
- * @summary G1: ParallelGCThreads==0 broken
- * @run main/othervm -XX:+UseG1GC -XX:ParallelGCThreads=0 -XX:+ResizePLAB -XX:+ExplicitGCInvokesConcurrent Test8000311
- * @author filipp.zhinkin@oracle.com
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the testTypes package.
+ *
  */
+@XmlRegistry
+public class ObjectFactory {
 
-import java.util.*;
-
-public class Test8000311 {
-  public static void main(String args[]) {
-    for(int i = 0; i<100; i++) {
-      byte[] garbage = new byte[1000];
-      System.gc();
+    /**
+     * Create a new ObjectFactory that can be used to create
+     * new instances of schema derived classes for package: testTypes
+     *
+     */
+    public ObjectFactory() {
     }
-  }
+
+    /**
+     * Create an instance of {@link Root }
+     *
+     */
+    public Root createRoot() {
+        return new Root();
+    }
+
+    /**
+     * Create an instance of {@link WhenType }
+     *
+     */
+    public WhenType createWhenType() {
+        return new WhenType();
+    }
+
 }
