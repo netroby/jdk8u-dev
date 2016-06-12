@@ -237,9 +237,8 @@ sun/security/tools/keytool/standard.sh                          solaris-all
 # 8026393
 sun/security/tools/jarsigner/warnings/BadKeyUsageTest.java      generic-all
 
-# 8154009
-javax/security/auth/PrivateCredentialPermission/MoreThenOnePrincipals.java solaris-all
-java/security/Policy/ExtensiblePolicy/ExtensiblePolicyTest.java            solaris-all 
+# 8158827
+sun/security/krb5/auto/tools/KinitConfPlusProps.java                       windows-all
 
 ############################################################################
 

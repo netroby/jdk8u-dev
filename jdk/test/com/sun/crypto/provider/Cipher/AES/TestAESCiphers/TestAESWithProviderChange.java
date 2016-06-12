@@ -1,5 +1,4 @@
-/*
- * Copyright (c) 2001, 2016, Oracle and/or its affiliates. All rights reserved.
+/* Copyright (c) 2012, 2015, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -21,24 +20,20 @@
  * questions.
  */
 
+import java.security.Security;
+
 /*
  * @test
- * @bug 4420687 8154009
- * @summary Make sure that a removed provider won't be acceessable.
- * @run main/othervm/policy=RemoveStaticProvider.policy RemoveStaticProvider
+ * @bug 8044193
+ * @summary Test AES ciphers with different modes and padding schemes after
+ *  remove then add provider.
+ * @run main/othervm/policy=testAES.policy TestAESWithProviderChange
  */
-import java.security.*;
-import javax.crypto.*;
 
-public class RemoveStaticProvider {
-
+public class TestAESWithProviderChange extends Dynamic {
     public static void main(String argv[]) throws Exception {
-        Security.removeProvider("SunJCE");
-        try {
-            KeyAgreement ka = KeyAgreement.getInstance("DH", "SunJCE");
-            throw new Exception("Hmm... didn't get expected exception!");
-        } catch (java.security.NoSuchProviderException nsa){
-            System.out.println("Passed -- as expected: " + nsa);
-        }
+        Security.removeProvider(SUNJCE);
+        Security.addProvider(new com.sun.crypto.provider.SunJCE());
+        new TestAESWithProviderChange().run(argv);
     }
 }
