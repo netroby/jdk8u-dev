@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -21,31 +21,20 @@
  * questions.
  */
 
-
-/* @test
- * @bug 5012882 6299047
- * @summary Test jvmti hprof
- *
- * @compile -g HelloWorld.java ../DemoRun.java
- * @build CpuOldTest
- * @run main CpuOldTest HelloWorld
+/*
+ * @test
+ * @bug 8160518
+ * @summary Semicolon is not recognized as comment starting character
+ * @run main/othervm Semicolon
  */
 
-public class CpuOldTest {
+import sun.security.krb5.Config;
 
-    public static void main(String args[]) throws Exception {
-        DemoRun hprof;
-
-        /* Run JVMTI hprof agent with cpu=old */
-        hprof = new DemoRun("hprof", "cpu=old,file=cpuold.txt");
-        hprof.runit(args[0]);
-
-        /* Make sure patterns in output look ok */
-        if (hprof.output_contains("ERROR")) {
-            throw new RuntimeException("Test failed - ERROR seen in output");
-        }
-
-        /* Must be a pass. */
-        System.out.println("Test passed - cleanly terminated");
+public class Semicolon {
+    public static void main(String[] args) throws Throwable {
+        System.setProperty("java.security.krb5.conf",
+                System.getProperty("test.src", ".") + "/comments.conf");
+        Config config = Config.getInstance();
+        config.get("section", "value");
     }
 }
